@@ -1,73 +1,116 @@
-# Welcome to your Lovable project
 
-## Project info
+# React Testing Kit
 
-**URL**: https://lovable.dev/projects/adee6f25-c852-4f4f-b822-669c1a35e6b0
+A comprehensive starter template for React projects with Jest and React Testing Library.
 
-## How can I edit this code?
+## Features
 
-There are several ways of editing your application.
+- ✅ React 18 with TypeScript
+- ✅ Tailwind CSS for styling
+- ✅ Jest for test running and assertions
+- ✅ React Testing Library for component testing
+- ✅ User event simulation for interaction testing
+- ✅ TypeScript support with ts-jest
 
-**Use Lovable**
+## Getting Started
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/adee6f25-c852-4f4f-b822-669c1a35e6b0) and start prompting.
+### Installation
 
-Changes made via Lovable will be committed automatically to this repo.
+```bash
+# Install dependencies
+npm install
+```
 
-**Use your preferred IDE**
+### Development
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+```bash
+# Start development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+### Testing
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+```bash
+# Run all tests
+npm test
 
-**Use GitHub Codespaces**
+# Run tests in watch mode
+npm test -- --watch
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+# Run tests with coverage
+npm test -- --coverage
+```
 
-## What technologies are used for this project?
+## Testing Guidelines
 
-This project is built with:
+### File Structure
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+- Place test files next to the component they test
+- Use `.test.tsx` or `.spec.tsx` as the file extension for test files
 
-## How can I deploy this project?
+Example:
+```
+/src
+  /components
+    /Button
+      Button.tsx
+      Button.test.tsx
+```
 
-Simply open [Lovable](https://lovable.dev/projects/adee6f25-c852-4f4f-b822-669c1a35e6b0) and click on Share -> Publish.
+### Writing Tests
 
-## Can I connect a custom domain to my Lovable project?
+#### 1. Basic Component Rendering
 
-Yes, you can!
+```jsx
+import { render, screen } from '@testing-library/react';
+import Button from './Button';
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+test('renders button with text', () => {
+  render(<Button>Click me</Button>);
+  expect(screen.getByText('Click me')).toBeInTheDocument();
+});
+```
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+#### 2. Testing User Interactions
+
+```jsx
+import { render, screen, fireEvent } from '@testing-library/react';
+import Button from './Button';
+
+test('calls onClick handler when clicked', () => {
+  const handleClick = jest.fn();
+  render(<Button onClick={handleClick}>Click me</Button>);
+  
+  fireEvent.click(screen.getByText('Click me'));
+  
+  expect(handleClick).toHaveBeenCalledTimes(1);
+});
+```
+
+#### 3. Testing Async Code
+
+```jsx
+import { render, screen, waitFor } from '@testing-library/react';
+import UserProfile from './UserProfile';
+
+test('loads and displays user data', async () => {
+  render(<UserProfile userId="123" />);
+  
+  // First shows loading state
+  expect(screen.getByText('Loading...')).toBeInTheDocument();
+  
+  // Then shows the user name when loaded
+  await waitFor(() => {
+    expect(screen.getByText('John Doe')).toBeInTheDocument();
+  });
+});
+```
+
+## Best Practices
+
+1. **Test behavior, not implementation**: Focus on what the component does, not how it's built.
+2. **Use data-testid sparingly**: Prefer using accessible attributes and text content for queries.
+3. **Mock external dependencies**: Use Jest's mocking capabilities to isolate the component under test.
+4. **Test edge cases**: Include tests for error states, boundary conditions, and loading states.
+5. **Keep tests simple**: Each test should verify a single piece of functionality.
+
