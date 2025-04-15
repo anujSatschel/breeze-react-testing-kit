@@ -2,6 +2,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import Counter from '@/components/Counter/Counter';
+import { Link } from 'react-router-dom';
 
 const Index = () => {
   return (
@@ -11,6 +12,11 @@ const Index = () => {
           <header className="text-center mb-12">
             <h1 className="text-4xl font-bold text-gray-900 mb-2">React Testing Kit</h1>
             <p className="text-xl text-gray-600">A starter template for React with Jest and React Testing Library</p>
+            <div className="mt-4">
+              <Button asChild>
+                <Link to="/recoil">View Recoil Examples</Link>
+              </Button>
+            </div>
           </header>
 
           <div className="bg-white shadow-md rounded-lg p-6 mb-8">
